@@ -1,0 +1,288 @@
+#!/system/bin/sh
+
+# Display choices to the user
+echo "Select language version:"
+echo "1. English version"
+echo "2. Indonesia version"
+echo -n "Enter your choice (1 or 2): "
+read choice
+
+if [ "$choice" = "1" ]; then
+    #!/system/bin/sh
+
+# setcpu, configure CPU for Android devices with custom ROMs
+# Usage:         setcpu [MINFREQ MAXFREQ GOVERNOR]
+#                setcpu -h, --help      #print this help message
+#                setcpu -s, --status    #print CPU status
+# If no parameters are specified, interactive setup guide will begin.
+# NOTE: This script MUST be executed with root privileges to make configuration changes!
+# Tips: run 'watch -n1 setcpu -s' to view CPU status, refresh every second.
+# CODE BY RAKARMP Zyarexx
+
+if [ $# -eq 0 ]; then
+    freqs=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies)
+    freqs2=$(cat /sys/devices/system/cpu/cpu4/cpufreq/scaling_available_frequencies)
+    echo "
+███████████████████████████████████████████████
+█▄─▄─▀█─▄▄─█─▄▄─█─▄▄▄▄█─▄─▄─█▄─▄▄▀█▄─▄▄─█▄─▄▄─█
+██─▄─▀█─██─█─██─█▄▄▄▄─███─████─██─██─▄█▀██─▄▄▄█
+▀▄▄▄▄▀▀▄▄▄▄▀▄▄▄▄▀▄▄▄▄▄▀▀▄▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▀▀▀"
+    echo ""
+    echo "NOTE: This script MUST be executed with root privileges to make configuration changes!"
+    echo -n "Current CPU min frequency: "; cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+    echo -n "Current CPU max frequency: "; cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    echo -n "Current CPU Cluster 2 min frequency: "; cat /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
+    echo -n "Current CPU Cluster 2 max frequency: "; cat /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq
+    echo -n "Current CPU governor: "; cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+    echo -n "Current CPU frequency: "; cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq
+    echo "Available CPU frequencies:"
+    echo "Cluster 1: $freqs"
+    echo "Cluster 2: $freqs2"
+    echo -n "Enter desired CPU Cluster 1 min frequency: "
+    read min_cluster1
+    if [ $min_cluster1 ]; then
+        if [ $(echo $freqs | grep -q -E " $min_cluster1 |^$min_cluster1 | $min_cluster1$"; echo $?) -eq 0 ]; then
+            echo $min_cluster1 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq && echo "Done"
+        else
+            echo "Enter a valid CPU frequency value!" 1>&2
+        fi
+    fi
+    unset min_cluster1
+
+    echo -n "Enter desired CPU Cluster 1 max frequency: "
+    read max_cluster1
+    if [ $max_cluster1 ]; then
+        if [ $(echo $freqs | grep -q -E " $max_cluster1 |^$max_cluster1 | $max_cluster1$"; echo $?) -eq 0 ]; then
+            echo $max_cluster1 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq && echo "Done"
+        else
+            echo "Enter a valid CPU frequency value!" 1>&2
+        fi
+    fi
+    unset max_cluster1
+
+    echo -n "Enter desired CPU Cluster 2 min frequency: "
+    read min_cluster2
+    if [ $min_cluster2 ]; then
+        if [ $(echo $freqs2 | grep -q -E " $min_cluster2 |^$min_cluster2 | $min_cluster2$"; echo $?) -eq 0 ]; then
+            echo $min_cluster2 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq && echo "Done"
+        else
+            echo "Enter a valid CPU frequency value!" 1>&2
+        fi
+    fi
+    unset min_cluster2
+
+    echo -n "Enter desired CPU Cluster 2 max frequency: "
+    read max_cluster2
+    if [ $max_cluster2 ]; then
+        if [ $(echo $freqs2 | grep -q -E " $max_cluster2 |^$max_cluster2 | $max_cluster2$"; echo $?) -eq 0 ]; then
+            echo $max_cluster2 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq && echo "Done"
+        else
+            echo "Enter a valid CPU frequency value!" 1>&2
+        fi
+    fi
+    unset max_cluster2
+
+    unset freqs
+    unset freqs2
+    gvnrs=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors)
+    echo "Available CPU governors: $gvnrs"
+    echo -n "Enter desired CPU governor: "
+    read gvnr
+    if [ $gvnr ]; then
+        if [ $(echo $gvnrs | grep -q -E " $gvnr |^$gvnr | $gvnr$"; echo $?) -eq 0 ]; then
+            echo $gvnr > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor && echo "Done"
+        else
+            echo "Enter a valid CPU governor!" 1>&2
+        fi
+    fi
+    unset gvnr
+    unset gvnrs
+elif [[ "$1" = '-h' || "$1" = '--help' ]]; then
+    echo "Usage:         setcpu [MINFREQ MAXFREQ GOVERNOR]"
+    echo "               setcpu -h, --help      #print this help message"
+    echo "               setcpu -s, --status    #print CPU status"
+    echo "If no parameters are specified, interactive setup guide will begin."
+    echo "NOTE: This script MUST be executed with root privileges to make configuration changes!"
+    echo "Tips: run 'watch -n1 setcpu -s' to view CPU status, refresh every second."
+    echo -n "Available CPU frequencies:"
+    cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
+    echo "Hotter than an iron! Overclocking! :)"
+elif [[ "$1" = '-s' || "$1" = '--status' ]]; then
+    echo -n "Available CPU frequencies:"; cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
+    echo -n "Current CPU min frequency: "; cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+    echo -n "Current CPU max frequency: "; cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    echo -n "Current CPU governor: "; cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+    echo -n "Current CPU frequency: "; cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq
+else
+    freqs=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies)
+    if [ $1 ]; then
+        if [ $(echo $freqs | grep -q -E " $1 |^$1 | $1$"; echo $?) -eq 0 ]; then
+            echo $1 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+        else
+            echo "Please use a valid value for the CPU min frequency!" 1>&2
+        fi
+    fi
+    if [ $2 ]; then
+        if [ $(echo $freqs | grep -q -E " $2 |^$2 | $2$"; echo $?) -eq 0 ]; then
+            echo $2 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+        else
+            echo "Please use a valid value for the CPU max frequency!" 1>&2
+        fi
+    fi
+    unset freqs
+    if [ $3 ]; then
+        if [ $(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors | grep -q -E " $3 |^$3 | $3$"; echo $?) -eq 0 ]; then
+            echo $3 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+        else
+            echo "Please use a valid CPU governor!" 1>&2
+        fi
+    fi
+fi
+
+
+# Wait for 1 second
+sleep 1
+
+echo "CPU Successfully Lock, @Zyarexx (Rakarmp)"
+
+
+elif [ "$choice" = "2" ]; then
+    #!/system/bin/sh
+
+# setcpu, mengatur CPU untuk Android yang udh pake custom ROM
+# Penggunaan:    setcpu [MINFREQ MAXFREQ GOVERNOR]
+#                setcpu -h, --help      #cetak pesan bantuan ini
+#                setcpu -s, --status    #cetak status CPU
+# Jika tidak ada parameter yang ditentukan, panduan setup interaktif akan dimulai.
+# CATATAN: Skrip ini HARUS dijalankan sebagai root untuk melakukan perubahan konfigurasi!
+# Tips: jalankan 'watch -n1 setcpu -s' untuk melihat status CPU, refresh setiap detik.
+# CODE BY RAKARMP Zyarexx
+
+if [ $# -eq 0 ]; then
+    freqs=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies)
+    freqs2=$(cat /sys/devices/system/cpu/cpu4/cpufreq/scaling_available_frequencies)
+    echo "
+███████████████████████████████████████████████
+█▄─▄─▀█─▄▄─█─▄▄─█─▄▄▄▄█─▄─▄─█▄─▄▄▀█▄─▄▄─█▄─▄▄─█
+██─▄─▀█─██─█─██─█▄▄▄▄─███─████─██─██─▄█▀██─▄▄▄█
+▀▄▄▄▄▀▀▄▄▄▄▀▄▄▄▄▀▄▄▄▄▄▀▀▄▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▀▀▀"
+    echo ""
+    echo "CATATAN: Skrip ini HARUS dijalankan sebagai root untuk melakukan perubahan konfigurasi!"
+    echo -n "Frekuensi CPU min saat ini: "; cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+    echo -n "Frekuensi CPU max saat ini: "; cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    echo -n "Frekuensi CPU Cluster 2 min saat ini :"; cat /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
+    echo -n "Frekuensi CPU Cluster 2 max saat ini :"; cat /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq
+    echo -n "Governor CPU saat ini: "; cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+    echo -n "Frekuensi CPU saat ini: "; cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq
+    echo "Frekuensi CPU yang tersedia:"
+    echo "Cluster 1: $freqs"
+    echo "Cluster 2: $freqs2"
+    echo -n "Masukkan frekuensi CPU Cluster 1 min yang diinginkan: "
+read min_cluster1
+if [ $min_cluster1 ]; then
+    if [ $(echo $freqs | grep -q -E " $min_cluster1 |^$min_cluster1 | $min_cluster1$"; echo $?) -eq 0 ]; then
+        echo $min_cluster1 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq && echo "Selesai"
+    else
+        echo "Masukkan nilai frekuensi CPU yang tersedia!" 1>&2
+    fi
+fi
+unset min_cluster1
+
+echo -n "Masukkan frekuensi CPU Cluster 1 max yang diinginkan: "
+read max_cluster1
+if [ $max_cluster1 ]; then
+    if [ $(echo $freqs | grep -q -E " $max_cluster1 |^$max_cluster1 | $max_cluster1$"; echo $?) -eq 0 ]; then
+        echo $max_cluster1 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq && echo "Selesai"
+    else
+        echo "Masukkan nilai frekuensi CPU yang tersedia!" 1>&2
+    fi
+fi
+unset max_cluster1
+
+echo -n "Masukkan frekuensi CPU Cluster 2 min yang diinginkan: "
+read min_cluster2
+if [ $min_cluster2 ]; then
+    if [ $(echo $freqs2 | grep -q -E " $min_cluster2 |^$min_cluster2 | $min_cluster2$"; echo $?) -eq 0 ]; then
+        echo $min_cluster2 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq && echo "Selesai"
+    else
+        echo "Masukkan nilai frekuensi CPU yang tersedia!" 1>&2
+    fi
+fi
+unset min_cluster2
+
+echo -n "Masukkan frekuensi CPU Cluster 2 max yang diinginkan: "
+read max_cluster2
+if [ $max_cluster2 ]; then
+    if [ $(echo $freqs2 | grep -q -E " $max_cluster2 |^$max_cluster2 | $max_cluster2$"; echo $?) -eq 0 ]; then
+        echo $max_cluster2 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq && echo "Selesai"
+    else
+        echo "Masukkan nilai frekuensi CPU yang tersedia!" 1>&2
+    fi
+fi
+unset max_cluster2
+
+    unset freqs
+    unset freqs2
+    gvnrs=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors)
+    echo "Governor CPU yang tersedia: $gvnrs"
+    echo -n "Masukkan tipe governor CPU yang diinginkan: "
+    read gvnr
+    if [ $gvnr ]; then
+        if [ $(echo $gvnrs | grep -q -E " $gvnr |^$gvnr | $gvnr$"; echo $?) -eq 0 ]; then
+            echo $gvnr > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor && echo "Selesai"
+        else
+            echo "Kocak kocak liat governor yang tersedia di depis lu!" 1>&2
+        fi
+    fi
+    unset gvnr
+    unset gvnrs
+elif [[ "$1" = '-h' || "$1" = '--help' ]]; then
+    echo "Penggunaan:    setcpu [MINFREQ MAXFREQ GOVERNOR]"
+    echo "               setcpu -h, --help      #cetak pesan bantuan ini"
+    echo "               setcpu -s, --status    #cetak status CPU"
+    echo "Jika tidak ada parameter yang ditentukan, panduan setup interaktif akan dimulai."
+    echo "CATATAN: Skrip ini HARUS dijalankan sebagai root untuk melakukan perubahan konfigurasi!"
+    echo "Tips: jalankan 'watch -n1 setcpu -s' untuk melihat status CPU, refresh setiap detik."
+    echo -n "Frekuensi CPU yang tersedia:"
+    cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
+    echo "Sepanas setrika !! overclocking! :)"
+elif [[ "$1" = '-s' || "$1" = '--status' ]]; then
+    echo -n "Frekuensi CPU yang tersedia:"; cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
+    echo -n "Frekuensi CPU min saat ini: "; cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+    echo -n "Frekuensi CPU max saat ini: "; cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    echo -n "Governor CPU saat ini: "; cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+    echo -n "Frekuensi CPU saat ini: "; cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq
+else
+    freqs=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies)
+    if [ $1 ]; then
+        if [ $(echo $freqs | grep -q -E " $1 |^$1 | $1$"; echo $?) -eq 0 ]; then
+            echo $1 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+        else
+            echo "Harap gunakan nilai yang valid untuk frekuensi CPU min!" 1>&2
+        fi
+    fi
+    if [ $2 ]; then
+        if [ $(echo $freqs | grep -q -E " $2 |^$2 | $2$"; echo $?) -eq 0 ]; then
+            echo $2 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+        else
+            echo "Harap gunakan nilai yang valid untuk frekuensi CPU max!" 1>&2
+        fi
+    fi
+    unset freqs
+    if [ $3 ]; then
+        if [ $(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors | grep -q -E " $3 |^$3 | $3$"; echo $?) -eq 0 ]; then
+            echo $3 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+        else
+            echo "Harap gunakan tipe governor CPU yang valid!" 1>&2
+        fi
+    fi
+fi
+
+# Jeda 1 detik
+sleep 1
+  echo "CPU Berhasil Terkunci, @Zyarexx (Rakarmp)"
+
+
+else
+    echo "Invalid choice. Please select either 1 or 2."
+fi
