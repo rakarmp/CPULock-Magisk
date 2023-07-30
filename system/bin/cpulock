@@ -90,7 +90,8 @@ if [ $# -eq 0 ]; then
     read gvnr
     if [ $gvnr ]; then
         if [ $(echo $gvnrs | grep -q -E " $gvnr |^$gvnr | $gvnr$"; echo $?) -eq 0 ]; then
-            echo $gvnr > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor && echo "Done"
+            echo $gvnr > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor && echo "Done, Set Governor Cluster 1"
+            echo $gvnr > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor && echo "Done, Set Governor Cluster 2"
         else
             echo "Enter a valid CPU governor!" 1>&2
         fi
@@ -229,7 +230,8 @@ unset max_cluster2
     read gvnr
     if [ $gvnr ]; then
         if [ $(echo $gvnrs | grep -q -E " $gvnr |^$gvnr | $gvnr$"; echo $?) -eq 0 ]; then
-            echo $gvnr > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor && echo "Selesai"
+            echo $gvnr > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor && echo "Berhasil, Set Governor Cluster 1"
+            echo $gvnr > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor && echo "Berhasil, Set Governor Cluster 2"
         else
             echo "Kocak kocak liat governor yang tersedia di depis lu!" 1>&2
         fi
