@@ -1,6 +1,15 @@
-## LOCKCPU | Magisk only🔥
+## CPULOCK
 
 Increase your cpu speed by locking it down
+
+Features :
+- CUSTOM CPU SPEED
+- CUSTOM GOVERNOR
+
+Terminal Menu :
+
+su -c cpulock
+
 
 Changelog :
 V1.2 :
@@ -12,21 +21,3 @@ V1.1 :
 - Add Thermal Killer Universal
 - Reworked Script
 - Fix Unzip Error
-
-Features :
-- ▌CUSTOM CPU SPEED
-- ▌CUSTOM GOVERNOR
-- ▌THERMAL KILLER
-
-Terminal Menu :
-
-su -c cpulock
-
-Uninstall Cpu Lock:
-Reboot your device.
-
-Uninstall Thermal Killer:
-Delete Module 
-
-Dev :
-@Zyarexx
