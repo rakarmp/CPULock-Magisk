@@ -12,6 +12,7 @@ su -c cpulock
 
 
 Changelog :
+
 V1.2 :
 - Fix governor for Cpu Cluster 1 and 2
 
